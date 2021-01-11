@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="#/banner">加载appA</a>
+    <a href="#/index">加载appB</a>
+    <div id="app"></div>
+    <script src="../lib/umd/my-single-spa.js"></script>
+    <script>
+        mySigleSpa.registerApplication(
+            'banner',
+            (props) => {
+                console.log(props)
+                let ctx = {
+                    container: null
+                }
+                return Promise.resolve({
+                    bootstrap: () => {
+                        console.log('bootstrapping')
+                        return Promise.resolve().then(() => {
+                            ctx.container = document.querySelector('#app')
+                        })
+                    },
+                    mount: () => {
+                        console.log('mounting')
+                        return Promise.resolve().then(() => {
+                            ctx.container.innerHTML = 'hell world App A'
+                        })
+                    },
+                    unmount: () => {
+                        console.log('unmounting')
+                        return Promise.resolve().then(() => {
+                            ctx.container.innerHTML = ''
+                        })
+                    }
+                })
+            },
+            () => {
+                return location.hash === '#/banner'
+            },
+            {
+                aa: 12,
+                cc: 33
+            }
+        )
+        mySigleSpa.registerApplication(
+            'index',
+            (props) => {
+                let ctx = {
+                    container: null
+                }
+                return Promise.resolve({
+                    bootstrap: () => {
+                        console.log('bootstrapping')
+                        return Promise.resolve().then(() => {
+                            ctx.container = document.querySelector('#app')
+                        })
+                    },
+                    mount: () => {
+                        console.log('mounting')
+                        return Promise.resolve().then(() => {
+                            ctx.container.innerHTML = 'hell world App B'
+                        })
+                    },
+                    unmount: () => {
+                        console.log('unmounting')
+                        return Promise.resolve().then(() => {
+                            ctx.container.innerHTML = ''
+                        })
+                    }
+                })
+            },
+            () => {
+                return location.hash === '#/index'
+            },
+            {
+                aa: 12,
+                cc: 33
+            }
+        )
+        mySigleSpa.start()
+    </script>
+</body>
+</html>
